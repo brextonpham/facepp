@@ -16,9 +16,9 @@ def print_result(hint, result):
         if type(obj) is list:
             return [encode(i) for i in obj]
         return obj
-    print hint
+    # print hint
     result = encode(result)
-    print '\n'.join(['  ' + i for i in pformat(result, width = 75).split('\n')])
+    return '\n'.join(['  ' + i for i in pformat(result, width = 75).split('\n')])
 
 
 IMAGE_DIR = 'http://cn.faceplusplus.com/static/resources/python_demo/'
@@ -52,6 +52,9 @@ MALE_PERSONS_TRAINING_8 = ['christian.jpg', 'jackson.jpg', 'justus.jpg', 'michae
 MALE_PERSONS_TRAINING_9 = ['conor.jpg', 'jamie.jpg', 'kevin.jpg', 'nathan.jpg', 'william.jpg', 'daniel.jpg', 'jason.jpg', 'kevins.jpg', 'neel.jpg', 'williaml.jpg']
 MALE_PERSONS_TRAINING_10 = ['danielr.jpg', 'jasonc.jpg', 'kevon.jpg', 'omar.jpg', 'willie.jpg', 'daren.jpg', 'jean.jpg', 'leszek.jpg', 'pablo.jpg', 'wyatt.jpg']
 
+
+MALE_PERSONS_TRAINING_NEW = ['danielr.jpg']
+
 smallpeople = [MALE_PERSONS_TRAINING_1, MALE_PERSONS_TRAINING_2, MALE_PERSONS_TRAINING_3, MALE_PERSONS_TRAINING_4, MALE_PERSONS_TRAINING_5, MALE_PERSONS_TRAINING_6, MALE_PERSONS_TRAINING_7, MALE_PERSONS_TRAINING_8, MALE_PERSONS_TRAINING_9, MALE_PERSONS_TRAINING_10]
 
 # idx = 1
@@ -63,14 +66,16 @@ smallpeople = [MALE_PERSONS_TRAINING_1, MALE_PERSONS_TRAINING_2, MALE_PERSONS_TR
 #     time.sleep(120)
 #     idx += 1
 
-
 arr = []
-for name in MALE_PERSONS_TRAINING_10:
+for name in MALE_PERSONS_TRAINING_NEW:
     arr.append((name,"http://web.stanford.edu/~kirbygee/tinder/male/" + name))
 
 FACES = {name: api.detection.detect(url = url) for name, url in arr}
 for name, face in FACES.iteritems():
-    print_result(name, face)
+    face_dict = face
+    face_dict = face_dict['face'][0]
+    for k, v in face_dict.iteritems():
+        print k, v
 
 # smallpeople = split_list(PERSONS)
 # for arr in smallpeople:

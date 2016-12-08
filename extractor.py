@@ -3,6 +3,9 @@ API_SECRET = 'RLlhwFY8j-iE4vk30-AadNqWYTsKz2-h'
 
 import time
 from pprint import pformat
+from facepp import API
+api = API(API_KEY, API_SECRET)
+
 # import requests
 def print_result(hint, result):
     def encode(obj):
@@ -17,34 +20,62 @@ def print_result(hint, result):
     result = encode(result)
     print '\n'.join(['  ' + i for i in pformat(result, width = 75).split('\n')])
 
-from facepp import API
-api = API(API_KEY, API_SECRET)
 
 IMAGE_DIR = 'http://cn.faceplusplus.com/static/resources/python_demo/'
-# r = requests.post('http://httpbin.org/post', files={'report.xls': open('report.xls', 'rb')})
-PERSONS = [
-    # ('Jim Parsons', IMAGE_DIR + '1.jpg'),
-    # ('Leonardo DiCaprio', IMAGE_DIR + '2.jpg'),
-    # ('Andy Liu', IMAGE_DIR + '3.jpg'),
-    # ('Tina Zheng', 'https://s13.postimg.org/5eal9h24n/tina.jpg'),
-    # ('Sharyn Lee','https://s15.postimg.org/agxnnu7rv/sharyn1.jpg'),
-    ('Meghana Rao', 'https://s17.postimg.org/63gf1u2yn/meghana.jpg'),
-    # ('Kirby Gee', 'https://s14.postimg.org/4fivpnolt/kirby2.jpg')
-    # ('Brexton Pham', 'https://s14.postimg.org/4btng7jb5/brexton2.png'),
-    # ('Meghana Rao', 'https://s21.postimg.org/gq83ye5gn/meghana_4.jpg')
-    # ('Ngoc Bui', 'https://s13.postimg.org/htfvrqrbr/ngoc.jpg'),
-    # ('Ben Josie', 'https://s15.postimg.org/gfyj663vf/ben_josie.jpg')
-    # ('Darby Schumacher', 'https://s11.postimg.org/seesrvwpv/darby.jpg')
-    # ('Dan Yu', 'https://s13.postimg.org/hr1njizev/dan.jpg')
-    # ('Jina Yoo', 'https://s17.postimg.org/gj007whjz/jina.jpg')
-    # ('Daren', 'http://web.stanford.edu/~kirbygee/tinder/male/davey.jpg')
-    # http://i1.kym-cdn.com/entries/icons/original/000/019/712/48029_ori.jpg
 
-]
+MALE_PERSONS_TRAINING = ['abdurezak.jpg', 'darius.jpg', 'jerry.jpg', 'louis.jpg', 'pavan.jpg', 'alan.jpg', 'davey.jpg', 'jimmie.jpg', 'louisa.jpg', 'pepe.jpg', 'alec.jpg', 'david.jpg', 'jin.jpg', 'luran.jpg', 'peyten.jpg', 'alex.jpg', 'deven.jpg', 'joe.jpg', 'mack.jpg', 'pradeep.jpg', 'andy.jpg', 'donovan.jpg', 'john.jpg', 'mandela.jpg', 'priten.jpp', 'andyw.jpg', 'dylan.jpg', 'johnny.jpg', 'marcus.jpg', 'sam.jpg', 'austin.jpg', 'eduardo.jpg', 'jon.jpg', 'marlon.jpg', 'samuel.jpg', 'basel.jpg', 'erez.jpg', 'jonathan.jpg', 'matt.jpg', 'samuell.jpg', 'ben.jpg', 'erik.jpg', 'jordan.jpg', 'mattj.jpg', 'sunui.jpg', 'bruno.jpg', 'filip.jpg', 'josh.jpg', 'max.jpg', 'tim.jpg', 'bryan.jpg', 'grant.jpg', 'joshua.jpg', 'maxh.jpg', 'timothy.jpg', 'caleb.jpg', 'handong.jpg', 'jovin.jpg', 'mezu.jpg', 'timothy1.jpg', 'cesar.jpg', 'henry.jpg', 'jullia.jpg', 'michael.jpg', 'tristen.jpg', 'chris.jpg', 'ilde.jpg', 'justin.jpg', 'michaela.jpg', 'tyler.jpg', 'christian.jpg', 'jackson.jpg', 'justus.jpg', 'michaels.jpg', 'tylerf.jpg', 'cole.jpg', 'jake.jpg', 'kamran.jpg', 'mirza.jpg', 'valentino.jpg', 'conor.jpg', 'jamie.jpg', 'kevin.jpg', 'nathan.jpg', 'william.jpg', 'daniel.jpg', 'jason.jpg', 'kevins.jpg', 'neel.jpg', 'williaml.jpg', 'danielr.jpg', 'jasonc.jpg', 'kevon.jpg', 'omar.jpg', 'willie.jpg', 'daren.jpg', 'jean.jpg', 'leszek.jpg', 'pablo.jpg', 'wyatt.jpg']
+FEMALE_PERSONS_TRAINING = []
+MALE_PERSONS_TEST = []
+FEMALE_PERSONS_TEST = []
+
+PERSONS = []
+def split_list(alist, wanted_parts=1):
+    length = len(alist)
+    return [alist[i*length // wanted_parts: (i+1)*length // wanted_parts] for i in range(wanted_parts)]
+
+for name in MALE_PERSONS_TRAINING:
+    PERSONS.append((name,"http://web.stanford.edu/~kirbygee/tinder/male/" + name))
+
 TARGET_IMAGE = IMAGE_DIR + '4.jpg'
 
-FACES = {name: api.detection.detect(url = url)
-        for name, url in PERSONS}
+smallpeople = split_list(PERSONS, 5)
+smallpeople = []
 
+MALE_PERSONS_TRAINING_1 = ['abdurezak.jpg', 'darius.jpg', 'jerry.jpg', 'louis.jpg', 'pavan.jpg', 'alan.jpg', 'davey.jpg', 'jimmie.jpg', 'louisa.jpg', 'pepe.jpg']
+MALE_PERSONS_TRAINING_2 = ['alec.jpg', 'david.jpg', 'jin.jpg', 'luran.jpg', 'peyten.jpg', 'alex.jpg', 'deven.jpg', 'joe.jpg', 'mack.jpg', 'pradeep.jpg']
+MALE_PERSONS_TRAINING_3 = ['andy.jpg', 'donovan.jpg', 'john.jpg', 'mandela.jpg', 'priten.jpp', 'andyw.jpg', 'dylan.jpg', 'johnny.jpg', 'marcus.jpg', 'sam.jpg']
+MALE_PERSONS_TRAINING_4 = ['austin.jpg', 'eduardo.jpg', 'jon.jpg', 'marlon.jpg', 'samuel.jpg', 'basel.jpg', 'erez.jpg', 'jonathan.jpg', 'matt.jpg', 'samuell.jpg']
+MALE_PERSONS_TRAINING_5 = ['ben.jpg', 'erik.jpg', 'jordan.jpg', 'mattj.jpg', 'sunui.jpg', 'bruno.jpg', 'filip.jpg', 'josh.jpg', 'max.jpg', 'tim.jpg']
+MALE_PERSONS_TRAINING_6 = ['bryan.jpg', 'grant.jpg', 'joshua.jpg', 'maxh.jpg', 'timothy.jpg', 'caleb.jpg', 'handong.jpg', 'jovin.jpg', 'mezu.jpg', 'timothy1.jpg']
+MALE_PERSONS_TRAINING_7 = ['cesar.jpg', 'henry.jpg', 'jullia.jpg', 'michael.jpg', 'tristen.jpg', 'chris.jpg', 'ilde.jpg', 'justin.jpg', 'michaela.jpg', 'tyler.jpg']
+MALE_PERSONS_TRAINING_8 = ['christian.jpg', 'jackson.jpg', 'justus.jpg', 'michaels.jpg', 'tylerf.jpg', 'cole.jpg', 'jake.jpg', 'kamran.jpg', 'mirza.jpg', 'valentino.jpg']
+MALE_PERSONS_TRAINING_9 = ['conor.jpg', 'jamie.jpg', 'kevin.jpg', 'nathan.jpg', 'william.jpg', 'daniel.jpg', 'jason.jpg', 'kevins.jpg', 'neel.jpg', 'williaml.jpg']
+MALE_PERSONS_TRAINING_10 = ['danielr.jpg', 'jasonc.jpg', 'kevon.jpg', 'omar.jpg', 'willie.jpg', 'daren.jpg', 'jean.jpg', 'leszek.jpg', 'pablo.jpg', 'wyatt.jpg']
+
+smallpeople = [MALE_PERSONS_TRAINING_1, MALE_PERSONS_TRAINING_2, MALE_PERSONS_TRAINING_3, MALE_PERSONS_TRAINING_4, MALE_PERSONS_TRAINING_5, MALE_PERSONS_TRAINING_6, MALE_PERSONS_TRAINING_7, MALE_PERSONS_TRAINING_8, MALE_PERSONS_TRAINING_9, MALE_PERSONS_TRAINING_10]
+
+# idx = 1
+# for arr in smallpeople:
+#     print 'Making Api Call %d / %d' % (idx, len(smallpeople))
+#     FACES = {name: api.detection.detect(url = url) for name, url in arr}
+#     for name, face in FACES.iteritems():
+#         print_result(name, face)
+#     time.sleep(120)
+#     idx += 1
+
+
+arr = []
+for name in MALE_PERSONS_TRAINING_10:
+    arr.append((name,"http://web.stanford.edu/~kirbygee/tinder/male/" + name))
+
+FACES = {name: api.detection.detect(url = url) for name, url in arr}
 for name, face in FACES.iteritems():
     print_result(name, face)
+
+# smallpeople = split_list(PERSONS)
+# for arr in smallpeople:
+#     FACES = {name: api.detection.detect(url = url)
+#         for name, url in arr}
+    
+#     for name, face in FACES.iteritems():
+#         print_result(name, face)

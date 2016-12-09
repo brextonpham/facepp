@@ -117,9 +117,9 @@ if gender == 'male':
     print trainSharon
 
     #toggle the binary classifier
-    # reg = neighbors.KNeighborsClassifier()
-    reg = ensemble.GradientBoostingClassifier()
     # reg = linear_model.LogisticRegression()
+    reg = ensemble.GradientBoostingClassifier()
+    # reg = neighbors.KNeighborsClassifier()
     reg.fit(trainSharon[:,1:], trainSharon[:,0])
     # print reg.coef_
 
@@ -151,8 +151,11 @@ else:
 
     trainBrexton = trainBrexton.as_matrix()
     reg = linear_model.LogisticRegression()
+    # reg = ensemble.GradientBoostingClassifier()
+    # reg = neighbors.KNeighborsClassifier()
+
     reg.fit(trainBrexton[:,1:], trainBrexton[:,0])
-    print reg.coef_
+    # print reg.coef_
 
     likes = 0
     predictedLikes = 0

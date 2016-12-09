@@ -1105,55 +1105,6 @@
                },
                "tag":""
             },
-            {
-               "attribute":{
-                  "age":{
-                     "range":5,
-                     "value":9
-                  },
-                  "gender":{
-                     "confidence":99.6514,
-                     "value":"Female"
-                  },
-                  "race":{
-                     "confidence":71.5712,
-                     "value":"White"
-                  },
-                  "smiling":{
-                     "value":66.9329
-                  }
-               },
-               "face_id":"d9ca69abb3752963b97cd5642155a3e5",
-               "position":{
-                  "center":{
-                     "x":17.564403,
-                     "y":31.0
-                  },
-                  "eye_left":{
-                     "x":15.525691,
-                     "y":29.932333
-                  },
-                  "eye_right":{
-                     "x":18.740843,
-                     "y":29.737333
-                  },
-                  "height":5.0,
-                  "mouth_left":{
-                     "x":16.515386,
-                     "y":32.075833
-                  },
-                  "mouth_right":{
-                     "x":19.054754,
-                     "y":31.933333
-                  },
-                  "nose":{
-                     "x":16.467424,
-                     "y":31.447
-                  },
-                  "width":7.025761
-               },
-               "tag":""
-            }
          ],
          "img_height":862,
          "img_id":"65968d7647b769ca6af87e56642ca590",
@@ -2914,55 +2865,6 @@
                },
                "tag":""
             },
-            {
-               "attribute":{
-                  "age":{
-                     "range":5,
-                     "value":22
-                  },
-                  "gender":{
-                     "confidence":97.3536,
-                     "value":"Female"
-                  },
-                  "race":{
-                     "confidence":99.5791,
-                     "value":"White"
-                  },
-                  "smiling":{
-                     "value":1.31946
-                  }
-               },
-               "face_id":"a195ca24f08b88e7710ec1ab850f776a",
-               "position":{
-                  "center":{
-                     "x":68.416667,
-                     "y":41.416667
-                  },
-                  "eye_left":{
-                     "x":66.834833,
-                     "y":39.2735
-                  },
-                  "eye_right":{
-                     "x":70.924333,
-                     "y":40.419667
-                  },
-                  "height":7.166667,
-                  "mouth_left":{
-                     "x":66.770167,
-                     "y":43.458167
-                  },
-                  "mouth_right":{
-                     "x":69.280667,
-                     "y":44.161833
-                  },
-                  "nose":{
-                     "x":67.198667,
-                     "y":42.162333
-                  },
-                  "width":7.166667
-               },
-               "tag":""
-            }
          ],
          "img_height":631,
          "img_id":"474a09359a38c259331e3ee01403174e",

@@ -7,7 +7,9 @@ from sklearn import preprocessing
 
 from pprint import pprint
 
-with open('male.json') as data_file:
+gender = 'male'
+
+with open(gender + '.json') as data_file:
     data = json.load(data_file)
 
 
@@ -33,7 +35,7 @@ HOT = 'hot'
 
 table = []
 usedNames = set()
-for row in data['males']:
+for row in data[gender]:
     face = row['face']
     newPerson = {}
     if len(face) > 0:
@@ -84,32 +86,38 @@ for person in table:
 
     for rating in ratings:
         if rating[0].replace(".jpg", "") == name:
-            person['Megs'] = str(rating[1])
-            person['Helen'] = str(rating[2])
-            person['Sharon'] = str(rating[3])
+            if gender == 'male':
+                person['Megs'] = str(rating[1])
+                person['Helen'] = str(rating[2])
+                person['Sharon'] = str(rating[3])
+            else:
+
 
 
 df = pandas.DataFrame(table)
 df = df.sort_values(by=NAME, ascending=1)
 df = df.drop('name', 1)
-trainHelen = df.drop('Megs', 1).drop('Sharon', 1)
-trainMegs = df.drop('Helen', 1).drop('Sharon', 1)
-trainSharon = df.drop('Megs', 1).drop('Helen', 1)
 
-le = preprocessing.LabelEncoder()
-le.fit(trainSharon.race)
-trainSharon.race = [str(r) for r in le.transform(trainSharon.race)]
+if gender == 'male':
+    trainHelen = df.drop('Megs', 1).drop('Sharon', 1)
+    trainMegs = df.drop('Helen', 1).drop('Sharon', 1)
+    trainSharon = df.drop('Megs', 1).drop('Helen', 1)
 
-
-
-trainSharon = trainSharon.as_matrix()
-print trainSharon
-reg = linear_model.LogisticRegression()
-reg.fit(trainSharon[:,1:], trainSharon[:,0])
-print reg.coef_
-
-for i, p in enumerate(reg.predict(trainSharon[:,1:])):
-    print p, trainSharon[:,0][i]
+    le = preprocessing.LabelEncoder()
+    le.fit(trainSharon.race)
+    trainSharon.race = [str(r) for r in le.transform(trainSharon.race)]
 
 
 
+    trainSharon = trainSharon.as_matrix()
+    print trainSharon
+    reg = linear_model.LogisticRegression()
+    reg.fit(trainSharon[:,1:], trainSharon[:,0])
+    print reg.coef_
+
+    for i, p in enumerate(reg.predict(trainSharon[:,1:])):
+        print p, trainSharon[:,0][i]
+else:
+    trainZach = df.drop('Brexton', 1).drop('Kirby', 1)
+    trainKirby = df.drop('Zach', 1).drop('Brexton', 1)
+    trainBrexton = df.drop('Zach', 1).drop('Kirby', 1)

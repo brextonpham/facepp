@@ -3,6 +3,7 @@ import pandas
 import csv
 import json
 from sklearn import linear_model
+from sklearn import neighbors
 from sklearn import preprocessing
 
 from pprint import pprint
@@ -112,9 +113,12 @@ if gender == 'male':
 
     trainSharon = trainSharon.as_matrix()
     print trainSharon
-    reg = linear_model.LogisticRegression()
+
+    #toggle the binary classifier
+    reg = neighbors.KNeighborsClassifier()
+    # reg = linear_model.LogisticRegression()
     reg.fit(trainSharon[:,1:], trainSharon[:,0])
-    print reg.coef_
+    # print reg.coef_
 
     for i, p in enumerate(reg.predict(trainSharon[:,1:])):
         print p, trainSharon[:,0][i]

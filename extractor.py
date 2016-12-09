@@ -52,8 +52,16 @@ MALE_PERSONS_TRAINING_8 = ['christian.jpg', 'jackson.jpg', 'justus.jpg', 'michae
 MALE_PERSONS_TRAINING_9 = ['conor.jpg', 'jamie.jpg', 'kevin.jpg', 'nathan.jpg', 'william.jpg', 'daniel.jpg', 'jason.jpg', 'kevins.jpg', 'neel.jpg', 'williaml.jpg']
 MALE_PERSONS_TRAINING_10 = ['danielr.jpg', 'jasonc.jpg', 'kevon.jpg', 'omar.jpg', 'willie.jpg', 'daren.jpg', 'jean.jpg', 'leszek.jpg', 'pablo.jpg', 'wyatt.jpg']
 
-
-MALE_PERSONS_TRAINING_NEW = ['danielr.jpg']
+FEMALE_PERSONS_TRAINING_1 = ['aakrati.jpg', 'adrianna.jpg', 'aisha.jpg', 'alice.jpg', 'allie.jpg', 'alliej.jpg', 'amanda.jpg', 'amandaf.jpg', 'amy.jpg', 'ana.jpg'] 
+FEMALE_PERSONS_TRAINING_2 = ['andrea.jpg', 'angelina.jpg', 'anna.jpg', 'annak.jpg', 'annie.jpg', 'aran.jpg', 'arianna.jpg', 'ariannac.jpg', 'august.jpg', 'belle.jpg']
+FEMALE_PERSONS_TRAINING_3 = ['birdie.jpg', 'brittany.jpg', 'brynn.jpg', 'caitlin.jpg', 'camille.jpg', 'camillen.jpg', 'chelsea.jpg', 'christine.jpg', 'claudia.jpg', 'courtney.jpg']
+FEMALE_PERSONS_TRAINING_4 = ['cristina.jpg', 'cynthia.jpg', 'daniela.jpg', 'eda.jpg', 'eehjoon.jpg', 'eleasha.jpg', 'elena.jpg', 'elenia.jpg', 'ellen.jpg', 'embree.jpg']
+FEMALE_PERSONS_TRAINING_5 = ['emi.jpg', 'emily.jpg', 'emilyt.jpg', 'emilyw.jpg', 'emilyz.jpg', 'esther.jpg', 'fiona.jpg', 'francesca.jpg', 'gerda.jpg', 'grazie.jpg']
+FEMALE_PERSONS_TRAINING_6 = ['hanel.jpg', 'hannah.jpg', 'hayley.jpg', 'hellary.jpg', 'isabel.jpg', 'izzi.jpg', 'jeewon.jpg', 'jessie.jpg', 'julia.jpg', 'kahanui.jpg']
+FEMALE_PERSONS_TRAINING_7 = ['kaitlin.jpg', 'katherine.jpg', 'katherinep.jpg', 'kim.jpg', 'kyliez.jpg', 'laura.jpg', 'leila.jpg', 'maria.jpg', 'marissa.jpg', 'melody.jpg']
+FEMALE_PERSONS_TRAINING_8 = ['michaela.jpg', 'michelle.jpg', 'minnie.jpg', 'nagham.jpg', 'natasha.jpg', 'neha.jpg', 'nora.jpg', 'noura.jpg', 'phoebe.jpg', 'priyanka.jpg']
+FEMALE_PERSONS_TRAINING_9 = ['sara.jpg', 'sarafina.jpg', 'sarah.jpg', 'sarahf.jpg', 'sarahj.jpg', 'schyler.jpg', 'sharon.jpg', 'shingshing.jpg', 'siri.jpg', 'sofia.jpg']
+FEMALE_PERSONS_TRAINING_10 = ['sofiag.jpg', 'solange.jpg', 'stephanie.jpg', 'varsha.jpg', 'vera.jpg', 'waverley.jpg', 'yehong.jpg', 'ying.jpg', 'zayan.jpg', 'zizi.jpg']
 
 smallpeople = [MALE_PERSONS_TRAINING_1, MALE_PERSONS_TRAINING_2, MALE_PERSONS_TRAINING_3, MALE_PERSONS_TRAINING_4, MALE_PERSONS_TRAINING_5, MALE_PERSONS_TRAINING_6, MALE_PERSONS_TRAINING_7, MALE_PERSONS_TRAINING_8, MALE_PERSONS_TRAINING_9, MALE_PERSONS_TRAINING_10]
 
@@ -67,15 +75,22 @@ smallpeople = [MALE_PERSONS_TRAINING_1, MALE_PERSONS_TRAINING_2, MALE_PERSONS_TR
 #     idx += 1
 
 arr = []
-for name in MALE_PERSONS_TRAINING_NEW:
-    arr.append((name,"http://web.stanford.edu/~kirbygee/tinder/male/" + name))
+# for name in MALE_PERSONS_TRAINING_1:
+#     arr.append((name,"http://web.stanford.edu/~kirbygee/tinder/male/" + name))
+
+
+for name in FEMALE_PERSONS_TRAINING_4:
+    arr.append((name,"http://web.stanford.edu/~kirbygee/tinder/female/" + name))
 
 FACES = {name: api.detection.detect(url = url) for name, url in arr}
+# for name, face in FACES.iteritems():
+#     face_dict = face
+#     face_dict = face_dict['face'][0]
+#     for k, v in face_dict.iteritems():
+#         print k, v
+
 for name, face in FACES.iteritems():
-    face_dict = face
-    face_dict = face_dict['face'][0]
-    for k, v in face_dict.iteritems():
-        print k, v
+    print print_result(name, face)
 
 # smallpeople = split_list(PERSONS)
 # for arr in smallpeople:

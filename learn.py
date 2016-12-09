@@ -120,8 +120,25 @@ if gender == 'male':
     reg.fit(trainSharon[:,1:], trainSharon[:,0])
     # print reg.coef_
 
-    for i, p in enumerate(reg.predict(trainSharon[:,1:])):
-        print p, trainSharon[:,0][i]
+    likes = 0
+    predictedLikes = 0
+    correctPredictions = 0
+    for i, p in enumerate(reg.predict(trainSharon[:,1:])): 
+        actual = trainSharon[:,0][i]
+        if actual == '1': 
+            likes += 1
+        if p == '1': 
+            predictedLikes += 1
+        if p == '1' and actual == '1': 
+            correctPredictions += 1
+
+    print likes, predictedLikes, correctPredictions
+    print 'actual likes: ', likes
+    print 'predicted likes: ', predictedLikes
+    print 'precision: ', float(correctPredictions) / predictedLikes
+    print 'recall: ', float(correctPredictions) / likes
+
+
 else:
     trainZach = df.drop('Brexton', 1).drop('Kirby', 1)
     trainKirby = df.drop('Zach', 1).drop('Brexton', 1)
@@ -130,6 +147,7 @@ else:
     le = preprocessing.LabelEncoder()
     le.fit(trainBrexton.race)
     trainBrexton.race = [str(r) for r in le.transform(trainBrexton.race)]
+    
     trainBrexton = trainBrexton.as_matrix()
     reg = linear_model.LogisticRegression()
     reg.fit(trainBrexton[:,1:], trainBrexton[:,0])

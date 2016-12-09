@@ -7,7 +7,7 @@ from sklearn import preprocessing
 
 from pprint import pprint
 
-gender = 'male'
+gender = 'female'
 
 with open(gender + '.json') as data_file:
     data = json.load(data_file)
@@ -122,3 +122,32 @@ else:
     trainZach = df.drop('Brexton', 1).drop('Kirby', 1)
     trainKirby = df.drop('Zach', 1).drop('Brexton', 1)
     trainBrexton = df.drop('Zach', 1).drop('Kirby', 1)
+
+    le = preprocessing.LabelEncoder()
+    le.fit(trainBrexton.race)
+    trainBrexton.race = [str(r) for r in le.transform(trainBrexton.race)]
+    trainBrexton = trainBrexton.as_matrix()
+    reg = linear_model.LogisticRegression()
+    reg.fit(trainBrexton[:,1:], trainBrexton[:,0])
+    print reg.coef_
+
+    likes = 0
+    predictedLikes = 0
+    correctPredictions = 0
+    for i, p in enumerate(reg.predict(trainBrexton[:,1:])): 
+        actual = trainBrexton[:,0][i]
+        if actual == '1': 
+            likes += 1
+        if p == '1': 
+            predictedLikes += 1
+        if p == '1' and actual == '1': 
+            correctPredictions += 1
+
+    print likes, predictedLikes, correctPredictions
+    print 'actual likes: ', likes
+    print 'predicted likes: ', predictedLikes
+    print 'precision: ', float(correctPredictions) / predictedLikes
+    print 'recall: ', float(correctPredictions) / likes
+
+
+

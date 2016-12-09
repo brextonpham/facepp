@@ -4,6 +4,8 @@ import csv
 import json
 from sklearn import linear_model
 from sklearn import neighbors
+from sklearn import ensemble
+
 from sklearn import preprocessing
 
 from pprint import pprint
@@ -115,13 +117,29 @@ if gender == 'male':
     print trainSharon
 
     #toggle the binary classifier
-    reg = neighbors.KNeighborsClassifier()
+    # reg = neighbors.KNeighborsClassifier()
+    reg = ensemble.GradientBoostingClassifier()
     # reg = linear_model.LogisticRegression()
     reg.fit(trainSharon[:,1:], trainSharon[:,0])
     # print reg.coef_
 
+    correct = 0
+    predictYesButWrong = 0
+    predictNoButWrong = 0
     for i, p in enumerate(reg.predict(trainSharon[:,1:])):
-        print p, trainSharon[:,0][i]
+        truth = p
+        predict = trainSharon[:,0][i]
+        print truth, predict
+        if truth == predict:
+            correct += 1
+        else:
+            if predict == 1:
+                predictYesButWrong += 1
+            else:
+                predictNoButWrong += 1
+    print 'Correct %d/%d' % (correct, 100)
+    print 'Predict YES but wrong: %d' % (predictYesButWrong)
+    print 'Predict NO but wrong: %d' % (predictNoButWrong)
 else:
     trainZach = df.drop('Brexton', 1).drop('Kirby', 1)
     trainKirby = df.drop('Zach', 1).drop('Brexton', 1)

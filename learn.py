@@ -1,8 +1,8 @@
 # convert json file into matrix
 import pandas
 import csv
-
 import json
+
 from pprint import pprint
 
 with open('male.json') as data_file:
@@ -61,7 +61,7 @@ for row in data['males']:
         newPerson[HEIGHT] = str(pos[HEIGHT])
         newPerson[WIDTH] = str(pos[WIDTH])
 
-        name = row['url'][row['url'].rfind('/') + 1 : -4]
+        name = str(row['url'][row['url'].rfind('/') + 1 : -4])
         newPerson[NAME] = name
         if name not in usedNames:
             table.append(newPerson)
@@ -70,19 +70,27 @@ for row in data['males']:
         print 'no face for ' + row['url']
 
 
+ratings = []
+i = 0
+with open('femaleRatings.csv', 'rb') as f:
+    reader = csv.reader(f)
+    for row in reader:
+        if i > 0:
+            ratings.append(row)
+        i += 1
+
+for person in table:
+    name = person[NAME]
+    for rating in ratings:
+        if rating[0].replace(".jpg", "") == name:
+            person['Megs'] = rating[1]
+            person['Helen'] = rating[2]
+            person['Sharon'] = rating[3]
+
+
 df = pandas.DataFrame(table)
 df = df.sort_values(by=NAME, ascending=1)
 print df
 males = df.as_matrix()
 print(males)
-
-
-
-ratings = []
-with open('maleNames.csv', 'rb') as csvfile:
-    reader = csv.reader(csvfile)
-    for row in reader:
-        print row[0]
-
-
 

@@ -74,7 +74,7 @@ for row in data[gender]:
 
 ratings = []
 i = 0
-with open('femaleRatings.csv', 'rb') as f:
+with open(gender + 'Ratings.csv', 'rb') as f:
     reader = csv.reader(f)
     for row in reader:
         if i > 0:
@@ -91,7 +91,9 @@ for person in table:
                 person['Helen'] = str(rating[2])
                 person['Sharon'] = str(rating[3])
             else:
-
+                person['Zach'] = str(rating[1])
+                person['Brexton'] = str(rating[2])
+                person['Kirby'] = str(rating[3])
 
 
 df = pandas.DataFrame(table)
@@ -106,7 +108,6 @@ if gender == 'male':
     le = preprocessing.LabelEncoder()
     le.fit(trainSharon.race)
     trainSharon.race = [str(r) for r in le.transform(trainSharon.race)]
-
 
 
     trainSharon = trainSharon.as_matrix()

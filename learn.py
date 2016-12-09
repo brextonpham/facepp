@@ -90,7 +90,9 @@ for person in table:
 
 df = pandas.DataFrame(table)
 df = df.sort_values(by=NAME, ascending=1)
-print df
-males = df.as_matrix()
-print(males)
+trainHelen = df.drop('Megs', 1).drop('Sharon', 1)
+trainMegs = df.drop('Helen', 1).drop('Sharon', 1)
+trainSharon = df.drop('Megs', 1).drop('Helen', 1)
+trainHelen = trainHelen.as_matrix()
+print(trainHelen)
 

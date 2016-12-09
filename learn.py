@@ -1,4 +1,5 @@
 # convert json file into matrix
+import pandas
 
 import json
 from pprint import pprint
@@ -23,7 +24,11 @@ NOSE = 'nose'
 HEIGHT = 'height'
 WIDTH = 'width'
 
+NAME = 'name'
+HOT = 'hot'
+
 table = []
+usedNames = set()
 for row in data['males']:
     face = row['face']
     newPerson = {}
@@ -52,8 +57,18 @@ for row in data['males']:
         newPerson[HEIGHT] = str(pos[HEIGHT])
         newPerson[WIDTH] = str(pos[WIDTH])
 
-        table.append(newPerson)
+        name = row['url'][row['url'].rfind('/') + 1 : -4]
+        newPerson[NAME] = name
+        if name not in usedNames:
+            table.append(newPerson)
+        usedNames.add(name)
     else:
         print 'no face for ' + row['url']
 
-print table
+
+df = pandas.DataFrame(table)
+df = df.sort_values(by=NAME, ascending=1)
+print df
+males = df.as_matrix()
+print(males)
+

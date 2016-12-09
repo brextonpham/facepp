@@ -9,7 +9,7 @@ with open('male.json') as data_file:
     data = json.load(data_file)
 
 
-        
+
 
 pprint(data)
 
@@ -81,11 +81,12 @@ with open('femaleRatings.csv', 'rb') as f:
 
 for person in table:
     name = person[NAME]
+
     for rating in ratings:
         if rating[0].replace(".jpg", "") == name:
-            person['Megs'] = rating[1]
-            person['Helen'] = rating[2]
-            person['Sharon'] = rating[3]
+            person['Megs'] = str(rating[1])
+            person['Helen'] = str(rating[2])
+            person['Sharon'] = str(rating[3])
 
 
 df = pandas.DataFrame(table)
@@ -95,4 +96,3 @@ trainMegs = df.drop('Helen', 1).drop('Sharon', 1)
 trainSharon = df.drop('Megs', 1).drop('Helen', 1)
 trainHelen = trainHelen.as_matrix()
 print(trainHelen)
-

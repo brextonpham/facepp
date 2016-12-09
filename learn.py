@@ -5,6 +5,8 @@ import json
 from sklearn import linear_model
 from sklearn import neighbors
 from sklearn import ensemble
+from sklearn import svm
+from sklearn import tree
 
 from sklearn import preprocessing
 
@@ -15,6 +17,9 @@ gender = 'female'
 with open(gender + '.json') as data_file:
     data = json.load(data_file)
 
+
+with open('test_' + gender + '.json') as data_file:
+    testData = json.load(data_file)
 
 pprint(data)
 
@@ -36,7 +41,8 @@ WIDTH = 'width'
 NAME = 'name'
 HOT = 'hot'
 
-table = []
+# read train data
+trainTable = []
 usedNames = set()
 for row in data[gender]:
     face = row['face']
@@ -69,7 +75,7 @@ for row in data[gender]:
         name = str(row['url'][row['url'].rfind('/') + 1 : -4])
         newPerson[NAME] = name
         if name not in usedNames:
-            table.append(newPerson)
+            trainTable.append(newPerson)
         usedNames.add(name)
     else:
         print 'no face for ' + row['url']
@@ -84,7 +90,7 @@ with open(gender + 'Ratings.csv', 'rb') as f:
             ratings.append(row)
         i += 1
 
-for person in table:
+for person in trainTable:
     name = person[NAME]
 
     for rating in ratings:
@@ -99,9 +105,73 @@ for person in table:
                 person['Kirby'] = str(rating[3])
 
 
-df = pandas.DataFrame(table)
+df = pandas.DataFrame(trainTable)
 df = df.sort_values(by=NAME, ascending=1)
 df = df.drop('name', 1)
+# read test data
+testTable = []
+usedNames = set()
+for row in testData[gender]:
+    face = row['face']
+    newPerson = {}
+    if len(face) > 0:
+        # get all attributes
+        attr = face[0]['attribute']
+        newPerson[AGE] = str(attr[AGE]['value'])
+        newPerson[RACE] = str(attr[RACE]['value'])
+        newPerson[SMILING] = str(attr[SMILING]['value'])
+
+        # get all position
+        pos = face[0]['position']
+        newPerson[CENTER + '_X'] = str(pos[CENTER]['x'])
+        newPerson[CENTER + '_Y'] = str(pos[CENTER]['y'])
+        newPerson[EYE_LEFT + '_X'] = str(pos[EYE_LEFT]['x'])
+        newPerson[EYE_LEFT + '_Y'] = str(pos[EYE_LEFT]['y'])
+        newPerson[EYE_RIGHT + '_X'] = str(pos[EYE_RIGHT]['x'])
+        newPerson[EYE_RIGHT + '_Y'] = str(pos[EYE_RIGHT]['y'])
+        newPerson[MOUTH_LEFT + '_X'] = str(pos[MOUTH_LEFT]['x'])
+        newPerson[MOUTH_LEFT + '_Y'] = str(pos[MOUTH_LEFT]['y'])
+        newPerson[MOUTH_RIGHT + '_X'] = str(pos[MOUTH_RIGHT]['x'])
+        newPerson[MOUTH_RIGHT + '_Y'] = str(pos[MOUTH_RIGHT]['y'])
+        newPerson[NOSE + '_X'] = str(pos[NOSE]['x'])
+        newPerson[NOSE + '_Y'] = str(pos[NOSE]['y'])
+
+        newPerson[HEIGHT] = str(pos[HEIGHT])
+        newPerson[WIDTH] = str(pos[WIDTH])
+
+        name = str(row['url'][row['url'].rfind('/') + 1 : -4])
+        newPerson[NAME] = name
+        if name not in usedNames:
+            testTable.append(newPerson)
+        usedNames.add(name)
+    else:
+        print 'no face for ' + row['url']
+
+ratings = []
+i = 0
+with open('test' + gender + 'Ratings.csv', 'rb') as f:
+    reader = csv.reader(f)
+    for row in reader:
+        if i > 0:
+            ratings.append(row)
+        i += 1
+for person in testTable:
+    name = person[NAME]
+
+    for rating in ratings:
+        if rating[0].replace(".jpg", "") == name:
+            if gender == 'male':
+                person['Megs'] = str(rating[1])
+                person['Helen'] = str(rating[2])
+                person['Sharon'] = str(rating[3])
+            else:
+                person['Zach'] = str(rating[1])
+                person['Brexton'] = str(rating[2])
+                person['Kirby'] = str(rating[3])
+
+dfTest = pandas.DataFrame(testTable)
+dfTest = dfTest.sort_values(by=NAME, ascending=1)
+dfTest = dfTest.drop('name', 1)
 
 if gender == 'male':
     trainHelen = df.drop('Megs', 1).drop('Sharon', 1)
@@ -112,9 +182,7 @@ if gender == 'male':
     le.fit(trainSharon.race)
     trainSharon.race = [str(r) for r in le.transform(trainSharon.race)]
 
-
     trainSharon = trainSharon.as_matrix()
-    print trainSharon
 
     #toggle the binary classifier
     # reg = linear_model.LogisticRegression()
@@ -144,24 +212,33 @@ else:
     trainZach = df.drop('Brexton', 1).drop('Kirby', 1)
     trainKirby = df.drop('Zach', 1).drop('Brexton', 1)
     trainBrexton = df.drop('Zach', 1).drop('Kirby', 1)
+    testBrexton = dfTest.drop('Zach', 1).drop('Kirby', 1)
 
     le = preprocessing.LabelEncoder()
     le.fit(trainBrexton.race)
     trainBrexton.race = [str(r) for r in le.transform(trainBrexton.race)]
+    testBrexton.race = [str(r) for r in le.transform(testBrexton.race)]
 
     trainBrexton = trainBrexton.as_matrix()
-    reg = linear_model.LogisticRegression()
-    # reg = ensemble.GradientBoostingClassifier()
-    # reg = neighbors.KNeighborsClassifier()
+    testBrexton = testBrexton.as_matrix()
 
+    # reg = linear_model.LogisticRegression()
+    reg = ensemble.GradientBoostingClassifier()
+    # reg = neighbors.KNeighborsClassifier()
+    # reg = linear_model.PassiveAggressiveClassifier()
+    # reg = svm.SVC()
+    # reg = ensemble.RandomForestClassifier()
+    # reg = tree.DecisionTreeClassifier()
+    # reg = linear_model.RidgeClassifier()
     reg.fit(trainBrexton[:,1:], trainBrexton[:,0])
     # print reg.coef_
 
     likes = 0
     predictedLikes = 0
     correctPredictions = 0
-    for i, p in enumerate(reg.predict(trainBrexton[:,1:])):
-        actual = trainBrexton[:,0][i]
+
+    for i, p in enumerate(reg.predict(testBrexton[:,1:])):
+        actual = testBrexton[:,0][i]
         if actual == '1':
             likes += 1
         if p == '1':

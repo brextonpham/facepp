@@ -1,11 +1,15 @@
 # convert json file into matrix
 import pandas
+import csv
 
 import json
 from pprint import pprint
 
 with open('male.json') as data_file:
     data = json.load(data_file)
+
+
+        
 
 pprint(data)
 
@@ -71,4 +75,14 @@ df = df.sort_values(by=NAME, ascending=1)
 print df
 males = df.as_matrix()
 print(males)
+
+
+
+ratings = []
+with open('maleNames.csv', 'rb') as csvfile:
+    reader = csv.reader(csvfile)
+    for row in reader:
+        print row[0]
+
+
 

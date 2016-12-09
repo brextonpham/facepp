@@ -9,8 +9,6 @@ with open('male.json') as data_file:
     data = json.load(data_file)
 
 
-
-
 pprint(data)
 
 AGE = 'age'

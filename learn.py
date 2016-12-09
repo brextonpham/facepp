@@ -2,6 +2,8 @@
 import pandas
 import csv
 import json
+from sklearn import linear_model
+from sklearn import preprocessing
 
 from pprint import pprint
 
@@ -91,8 +93,25 @@ for person in table:
 
 df = pandas.DataFrame(table)
 df = df.sort_values(by=NAME, ascending=1)
+df = df.drop('name', 1)
 trainHelen = df.drop('Megs', 1).drop('Sharon', 1)
 trainMegs = df.drop('Helen', 1).drop('Sharon', 1)
 trainSharon = df.drop('Megs', 1).drop('Helen', 1)
-trainHelen = trainHelen.as_matrix()
-print(trainHelen)
+
+le = preprocessing.LabelEncoder()
+le.fit(trainSharon.race)
+trainSharon.race = [str(r) for r in le.transform(trainSharon.race)]
+
+
+
+trainSharon = trainSharon.as_matrix()
+print trainSharon
+reg = linear_model.LogisticRegression()
+reg.fit(trainSharon[:,1:], trainSharon[:,0])
+print reg.coef_
+
+for i, p in enumerate(reg.predict(trainSharon[:,1:])):
+    print p, trainSharon[:,0][i]
+
+
+

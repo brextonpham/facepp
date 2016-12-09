@@ -81,6 +81,6 @@ for name, face in FACES.iteritems():
 # for arr in smallpeople:
 #     FACES = {name: api.detection.detect(url = url)
 #         for name, url in arr}
-    
+
 #     for name, face in FACES.iteritems():
 #         print_result(name, face)

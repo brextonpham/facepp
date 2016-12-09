@@ -252,14 +252,14 @@ else:
         print '++++++++ %s ++++++++' % (trial[2])
         for classifier in classifiers:
             reg, classifierName = classifier
-
-
             reg.fit(trainSet[:,1:], trainSet[:,0])
 
             likes = 0
             predictedLikes = 0
             correctPredictions = 0
-
+            correctNotPredictions = 0
+            falsePositive = 0
+            falseNegative = 0
             for i, p in enumerate(reg.predict(testSet[:,1:])):
                 actual = testSet[:,0][i]
                 if actual == '1':
@@ -268,12 +268,21 @@ else:
                     predictedLikes += 1
                 if p == '1' and actual == '1':
                     correctPredictions += 1
-
+                if p == '0' and actual == '0':
+                    correctNotPredictions += 1
+                if p == '1' and actual == '0':
+                    falsePositive += 1
+                if p == '0' and actual == '1':
+                    falseNegative += 1
+            precision = float(correctPredictions) / predictedLikes
+            recall = float(correctPredictions) / likes
             print 'classifier: ' + classifierName
             # print likes, predictedLikes, correctPredictions
             print 'actual likes: ', likes
             print 'predicted likes: ', predictedLikes
-            print 'precision: ', float(correctPredictions) / predictedLikes
-            print 'recall: ', float(correctPredictions) / likes
+            print 'accuracy: ', float(correctPredictions + correctNotPredictions)/ float(correctPredictions + correctNotPredictions + falsePositive + falseNegative)
+            print 'precision: ', precision
+            print 'recall: ', recall
+            print 'F1 score: ', 2. * float(precision * recall) / (precision + recall + 0.1)
             print '\n'
         print '\n'

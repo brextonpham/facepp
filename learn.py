@@ -210,17 +210,13 @@ if gender == 'male':
     print 'recall: ', float(correctPredictions) / likes
 else:
     trainZach = df.drop('Brexton', 1).drop('Kirby', 1)
+    testZach = dfTest.drop('Brexton', 1).drop('Kirby', 1)
+
     trainKirby = df.drop('Zach', 1).drop('Brexton', 1)
+    testKirby = dfTest.drop('Zach', 1).drop('Brexton', 1)
+
     trainBrexton = df.drop('Zach', 1).drop('Kirby', 1)
     testBrexton = dfTest.drop('Zach', 1).drop('Kirby', 1)
-
-    le = preprocessing.LabelEncoder()
-    le.fit(trainBrexton.race)
-    trainBrexton.race = [str(r) for r in le.transform(trainBrexton.race)]
-    testBrexton.race = [str(r) for r in le.transform(testBrexton.race)]
-
-    trainBrexton = trainBrexton.as_matrix()
-    testBrexton = testBrexton.as_matrix()
 
     # reg = linear_model.LogisticRegression()
     reg = ensemble.GradientBoostingClassifier()
@@ -230,24 +226,40 @@ else:
     # reg = ensemble.RandomForestClassifier()
     # reg = tree.DecisionTreeClassifier()
     # reg = linear_model.RidgeClassifier()
-    reg.fit(trainBrexton[:,1:], trainBrexton[:,0])
-    # print reg.coef_
 
-    likes = 0
-    predictedLikes = 0
-    correctPredictions = 0
+    trials = [(trainZach, testZach, 'Zach'), (trainKirby, testKirby, 'Kirby'), (trainBrexton, testBrexton, 'Brexton')]
 
-    for i, p in enumerate(reg.predict(testBrexton[:,1:])):
-        actual = testBrexton[:,0][i]
-        if actual == '1':
-            likes += 1
-        if p == '1':
-            predictedLikes += 1
-        if p == '1' and actual == '1':
-            correctPredictions += 1
+    for trial in trials:
 
-    print likes, predictedLikes, correctPredictions
-    print 'actual likes: ', likes
-    print 'predicted likes: ', predictedLikes
-    print 'precision: ', float(correctPredictions) / predictedLikes
-    print 'recall: ', float(correctPredictions) / likes
+        trainSet, testSet, name = trial
+        le = preprocessing.LabelEncoder()
+        le.fit(trainBrexton.race)
+        trainSet.race = [str(r) for r in le.transform(trainSet.race)]
+        testSet.race = [str(r) for r in le.transform(testSet.race)]
+
+        trainSet = trainSet.as_matrix()
+        testSet = testSet.as_matrix()
+
+
+        reg.fit(trainSet[:,1:], trainSet[:,0])
+
+        likes = 0
+        predictedLikes = 0
+        correctPredictions = 0
+
+        for i, p in enumerate(reg.predict(testSet[:,1:])):
+            actual = testSet[:,0][i]
+            if actual == '1':
+                likes += 1
+            if p == '1':
+                predictedLikes += 1
+            if p == '1' and actual == '1':
+                correctPredictions += 1
+
+        print '++++++++ %s ++++++++' % (name)
+        # print likes, predictedLikes, correctPredictions
+        print 'actual likes: ', likes
+        print 'predicted likes: ', predictedLikes
+        print 'precision: ', float(correctPredictions) / predictedLikes
+        print 'recall: ', float(correctPredictions) / likes
+        print '\n'

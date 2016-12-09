@@ -219,18 +219,27 @@ else:
     testBrexton = dfTest.drop('Zach', 1).drop('Kirby', 1)
 
     # reg = linear_model.LogisticRegression()
-    reg = ensemble.GradientBoostingClassifier()
+    # reg = ensemble.GradientBoostingClassifier()
     # reg = neighbors.KNeighborsClassifier()
-    # reg = linear_model.PassiveAggressiveClassifier()
-    # reg = svm.SVC()
     # reg = ensemble.RandomForestClassifier()
     # reg = tree.DecisionTreeClassifier()
     # reg = linear_model.RidgeClassifier()
 
+    # reg = linear_model.PassiveAggressiveClassifier()
+    # reg = svm.SVC()
+
+    classifiers = [
+                (linear_model.LogisticRegression(), 'LogisticRegression'),
+                (ensemble.GradientBoostingClassifier(), 'GradientBoostingClassifier'),
+                (neighbors.KNeighborsClassifier(), 'KNeighborsClassifier'),
+                (ensemble.RandomForestClassifier(), 'RandomForestClassifier'),
+                (tree.DecisionTreeClassifier(), 'DecisionTreeClassifier'),
+                (linear_model.RidgeClassifier(), 'RidgeClassifier')
+            ]
+
     trials = [(trainZach, testZach, 'Zach'), (trainKirby, testKirby, 'Kirby'), (trainBrexton, testBrexton, 'Brexton')]
 
     for trial in trials:
-
         trainSet, testSet, name = trial
         le = preprocessing.LabelEncoder()
         le.fit(trainBrexton.race)
@@ -240,26 +249,31 @@ else:
         trainSet = trainSet.as_matrix()
         testSet = testSet.as_matrix()
 
+        print '++++++++ %s ++++++++' % (trial[2])
+        for classifier in classifiers:
+            reg, classifierName = classifier
 
-        reg.fit(trainSet[:,1:], trainSet[:,0])
 
-        likes = 0
-        predictedLikes = 0
-        correctPredictions = 0
+            reg.fit(trainSet[:,1:], trainSet[:,0])
 
-        for i, p in enumerate(reg.predict(testSet[:,1:])):
-            actual = testSet[:,0][i]
-            if actual == '1':
-                likes += 1
-            if p == '1':
-                predictedLikes += 1
-            if p == '1' and actual == '1':
-                correctPredictions += 1
+            likes = 0
+            predictedLikes = 0
+            correctPredictions = 0
 
-        print '++++++++ %s ++++++++' % (name)
-        # print likes, predictedLikes, correctPredictions
-        print 'actual likes: ', likes
-        print 'predicted likes: ', predictedLikes
-        print 'precision: ', float(correctPredictions) / predictedLikes
-        print 'recall: ', float(correctPredictions) / likes
+            for i, p in enumerate(reg.predict(testSet[:,1:])):
+                actual = testSet[:,0][i]
+                if actual == '1':
+                    likes += 1
+                if p == '1':
+                    predictedLikes += 1
+                if p == '1' and actual == '1':
+                    correctPredictions += 1
+
+            print 'classifier: ' + classifierName
+            # print likes, predictedLikes, correctPredictions
+            print 'actual likes: ', likes
+            print 'predicted likes: ', predictedLikes
+            print 'precision: ', float(correctPredictions) / predictedLikes
+            print 'recall: ', float(correctPredictions) / likes
+            print '\n'
         print '\n'

@@ -179,27 +179,27 @@ def featureExtractor(state, action):
 
 
 
-# mdp = tinderMDP(likingScores, numPeople)
-# ql = QLearning(mdp.actions, mdp.discount(), featureExtractor)
-# print 'Performing QLearning...'
-# simulate(mdp, ql, numTrials=500000)
-# ql.explorationProb = 0
-# totalRewards = simulate(mdp, ql, numTrials=500000)
-# #print 'Total Rewards: ', totalRewards
-# print 'Total Rewards Average (QLearning): ', float(sum(totalRewards)) / len(totalRewards)
-# #print ql.weights
+mdp = tinderMDP(likingScores, numPeople)
+ql = QLearning(mdp.actions, mdp.discount(), featureExtractor)
+print 'Performing QLearning...'
+simulate(mdp, ql, numTrials=500000)
+ql.explorationProb = 0
+totalRewards = simulate(mdp, ql, numTrials=500000)
+#print 'Total Rewards: ', totalRewards
+print 'Total Rewards Average (QLearning): ', float(sum(totalRewards)) / len(totalRewards)
+#print ql.weights
 
-# ql.explorationProb = 1
-# print 'Simulating Random Policy...'
-# totalRewardsRandom = simulate(mdp, ql, numTrials=500000)
-# #print 'Total Rewards (Random): ', totalRewardsRandom
-# print 'Average (Random): ', float(sum(totalRewardsRandom)) / len(totalRewardsRandom)
+ql.explorationProb = 1
+print 'Simulating Random Policy...'
+totalRewardsRandom = simulate(mdp, ql, numTrials=500000)
+#print 'Total Rewards (Random): ', totalRewardsRandom
+print 'Average (Random): ', float(sum(totalRewardsRandom)) / len(totalRewardsRandom)
 
 mdp = tinderMDP(likingScores, numPeople)
 VI = ValueIteration()
 print 'Performing Value Iteration...'
 VI.solve(mdp)
-totalRewardsVI = simulate(mdp, pi=VI.pi, numTrials=10000)
+totalRewardsVI = simulate(mdp, pi=VI.pi, numTrials=500000)
 print 'Average (VI): ', float(sum(totalRewardsVI)) / len(totalRewardsVI)
 showValueIterationPolicy = True
 if showValueIterationPolicy:
